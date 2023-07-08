@@ -138,31 +138,30 @@ end
 
 
 
-def calculate_monthly_payment(loan_amount, annual_interest, loan_duration)
-
+def calculate_monthly_payment(loan_amount, monthly_interest, loan_duration)
+  loan_amount * (monthly_interest / (1 - (1 + monthly_interest)**(-(loan_duration))))
 end
 
 
 
 
 
-# Loan Amount
+# Inputs
 loan_amount = read_input('loan_amount')
-p loan_amount
-yearly_interest = read_input('yearly_interest') / 100
-p yearly_interest
+
+yearly_interest = read_input('yearly_interest')
+monthly_interest = yearly_interest / 100 / 12
+
 loan_duration = read_duration_input('loan_duration')
-p loan_duration
 loan_duration_in_months = loan_duration[:years] * 12 + loan_duration[:months]
-p loan_duration_in_months
 
-  # prompt('loan_duration')
-  # prompt('loan_years')
-  # loan_years = gets.chomp # Must be numeric; convert to int
-  # prompt('loan_months')
-  # loan_months = gets.chomp # Must be numeric; convert to int
+monthly_payment = calculate_monthly_payment(loan_amount, monthly_interest, loan_duration_in_months).round(2)
 
+output_message = <<-HEREDOC
+  Given a loan amount of $#{loan_amount}, 
+     a yearly interest rate of #{yearly_interest}%,
+     and a loan duration of #{loan_duration[:years]} years, #{loan_duration[:months]} months:
 
-
-# puts "Given a loan amount of #{loan_amount}, a yearly interest rate of #{yearly_interest}" +
-#     ", and a loan duration of #{loan_years}, #{loan_months}:"
+  Your monthly payments will be $#{monthly_payment}.
+HEREDOC
+prompt(output_message)
