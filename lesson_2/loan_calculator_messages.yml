@@ -1,0 +1,6 @@
+en:
+  loan_amount: 'How much money are you borrowing? (in $)'
+  yearly_interest: "What's the yearly interest rate? (in %)"
+  loan_duration: 'How long do you have to pay off your loan?'
+  loan_years: 'Years:'
+  loan_months: 'Months:'
