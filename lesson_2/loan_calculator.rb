@@ -1,6 +1,7 @@
 require 'yaml'
 MESSAGES = YAML.load_file('loan_calculator_messages.yml')
 LANGUAGE = 'en'
+MONTHS_IN_YEAR = 12
 
 def prompt(key, lang='en')
   message = MESSAGES[lang][key] || key
@@ -81,10 +82,10 @@ loop do
   amount = read_input('loan_amount').to_f
 
   yearly_interest = read_input('yearly_interest').to_f
-  monthly_interest = yearly_interest / 100 / 12
+  monthly_interest = yearly_interest / 100 / MONTHS_IN_YEAR
 
   duration = read_duration_input('loan_duration').transform_values(&:to_i)
-  duration_in_months = (duration[:years] * 12) + duration[:months]
+  duration_in_months = (duration[:years] * MONTHS_IN_YEAR) + duration[:months]
 
   # Outputs
   monthly_payment = calculate_monthly_payment(amount,
