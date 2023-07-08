@@ -96,12 +96,19 @@ end
 def valid_input?(input, message)
   case message
   when 'loan_amount' then valid_loan_amount?(input)
+  when 'yearly_interest' then valid_interest?(input)
   end
 end
 
 def valid_loan_amount?(input)
   return prompt('valid_number') unless numeric?(input)
   return prompt('loan_amount_zero') unless input.to_f.positive?
+  true
+end
+
+def valid_interest?(input)
+  return prompt('valid_number') unless numeric?(input)
+  return prompt('interest_negative') if input.to_f.negative?
   true
 end
 
@@ -120,7 +127,8 @@ end
 # Loan Amount
 loan_amount = read_input('loan_amount')
 p loan_amount
-  
+yearly_interest = read_input('yearly_interest') / 100
+p yearly_interest
 
   # prompt('yearly_interest')
   # yearly_interest = gets.chomp # Must be numeric; convert to float
