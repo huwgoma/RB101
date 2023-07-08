@@ -76,6 +76,18 @@ def read_input(message)
   end
 end
 
+def read_duration_input(message)
+  loop do
+    input = {}
+    prompt(message)
+    prompt('loan_years')
+    input[:years] = gets.chomp
+    prompt('loan_months')
+    input[:months] = gets.chomp
+    return input.transform_values(&:to_i) if valid_input?(input, message)
+  end
+end
+
 # (Validate all of these inputs separately.)
 # Validate Loan Amount:
 #   - Is the input a number? 
@@ -97,6 +109,7 @@ def valid_input?(input, message)
   case message
   when 'loan_amount' then valid_loan_amount?(input)
   when 'yearly_interest' then valid_interest?(input)
+  when 'loan_duration' then valid_loan_duration?(input)
   end
 end
 
@@ -109,6 +122,15 @@ end
 def valid_interest?(input)
   return prompt('valid_number') unless numeric?(input)
   return prompt('interest_negative') if input.to_f.negative?
+  true
+end
+
+def valid_loan_duration?(input)
+  values = input.values
+  return prompt('valid_number') unless values.all? { |v| numeric?(v) }
+  values.map!(&:to_i)
+  return prompt('loan_duration_negative') if values.any?(&:negative?)
+  return prompt('loan_duration_zero') if values.none?(&:positive?)
   true
 end
 
@@ -129,9 +151,11 @@ loan_amount = read_input('loan_amount')
 p loan_amount
 yearly_interest = read_input('yearly_interest') / 100
 p yearly_interest
+loan_duration = read_duration_input('loan_duration')
+p loan_duration
+loan_duration_in_months = loan_duration[:years] * 12 + loan_duration[:months]
+p loan_duration_in_months
 
-  # prompt('yearly_interest')
-  # yearly_interest = gets.chomp # Must be numeric; convert to float
   # prompt('loan_duration')
   # prompt('loan_years')
   # loan_years = gets.chomp # Must be numeric; convert to int

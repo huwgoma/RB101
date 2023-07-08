@@ -7,3 +7,5 @@ en:
   valid_number: "Hm. That doesn't look like a valid number."
   loan_amount_zero: "Loan amount must be more than 0!"
   interest_negative: "Interest rate cannot be negative!"
+  loan_duration_negative: "The loan duration cannot be negative!"
+  loan_duration_zero: "The loan term must be at least 1 month long."
