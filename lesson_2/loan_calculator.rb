@@ -76,6 +76,7 @@ def calculate_again?
 end
 
 loop do
+  system('clear')
   # Inputs
   amount = read_input('loan_amount')
 
@@ -87,13 +88,14 @@ loop do
 
   # Outputs
   monthly_payment = calculate_monthly_payment(amount, monthly_interest, duration_in_months).round(2)
-
+  prompt('calculating')
+  sleep 0.5
   output_message = <<-HEREDOC
-    Given a loan amount of $#{amount},
-      a yearly interest rate of #{yearly_interest}%,
-      and a loan duration of #{duration[:years]} years, #{duration[:months]} months:
+Given a loan amount of $#{amount},
+   a yearly interest rate of #{yearly_interest}%,
+   and a loan duration of #{duration[:years]} years, #{duration[:months]} months:
 
-    Your monthly payments will be $#{monthly_payment}.
+   Your monthly payments will be $#{monthly_payment}.
   HEREDOC
   prompt(output_message)
 

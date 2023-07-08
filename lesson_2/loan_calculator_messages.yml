@@ -9,6 +9,7 @@ en:
   interest_negative: 'Interest rate cannot be negative!'
   loan_duration_negative: 'The loan duration cannot be negative!'
   loan_duration_zero: 'The loan term must be at least 1 month long.'
+  calculating: 'Calculating...'
   calculate_again: 'Do you want to calculate again? (Y/N)'
   again_invalid: 'Please enter Y to calculate again or N to quit.'
   goodbye: 'Goodbye!'
