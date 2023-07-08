@@ -138,8 +138,9 @@ end
 
 
 
-def calculate_monthly_payment(loan_amount, monthly_interest, loan_duration)
-  loan_amount * (monthly_interest / (1 - (1 + monthly_interest)**(-(loan_duration))))
+def calculate_monthly_payment(loan_amount, monthly_interest, loan_duration_months)
+  return loan_amount / loan_duration_months if monthly_interest.zero?
+  loan_amount * (monthly_interest / (1 - (1 + monthly_interest)**(-(loan_duration_months))))
 end
 
 
@@ -155,6 +156,7 @@ monthly_interest = yearly_interest / 100 / 12
 loan_duration = read_duration_input('loan_duration')
 loan_duration_in_months = loan_duration[:years] * 12 + loan_duration[:months]
 
+# Output
 monthly_payment = calculate_monthly_payment(loan_amount, monthly_interest, loan_duration_in_months).round(2)
 
 output_message = <<-HEREDOC
