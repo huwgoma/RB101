@@ -4,3 +4,4 @@ en:
   loan_duration: 'How long do you have to pay off your loan?'
   loan_years: 'Years:'
   loan_months: 'Months:'
+  valid_number: "Hm. That doesn't look like a valid number."

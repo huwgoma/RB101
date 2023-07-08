@@ -1,6 +1,5 @@
 require 'yaml'
 MESSAGES = YAML.load_file('loan_calculator_messages.yml')
-puts MESSAGES.inspect
 LANGUAGE = 'en'
 # Car Payment Calculator
 # You need to take out a loan to buy a car.
@@ -69,19 +68,27 @@ def numeric?(str)
   !!(Integer(str) rescue false || Float(str) rescue false)
 end
 
+def read_input(message)
+  loop do
+    prompt(message)
+    input = gets.chomp
+    next prompt('valid_number') unless numeric?(input)
+    
+    input = input.to_f 
+    format_message = message.gsub('_', ' ').capitalize
+    next prompt("#{format_message} must be more than 0!") unless input.positive?
+    return input
+  end
+end
+
 def calculate_monthly_payment(loan_amount, annual_interest, loan_duration)
 
 end
 
-loan_amount = nil
-loop do
-  prompt('loan_amount')
-  loan_amount = gets.chomp # Must be numeric; convert to float ; must be positive
-  break if numeric?(loan_amount)
-  puts "That doesn't seem like a valid number."
-end
+# Loan Amount
+loan_amount = read_input('loan_amount')
+  
 
-puts "#{loan_amount} is numeric!"
   # prompt('yearly_interest')
   # yearly_interest = gets.chomp # Must be numeric; convert to float
   # prompt('loan_duration')
