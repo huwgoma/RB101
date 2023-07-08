@@ -1,3 +1,7 @@
+require 'yaml'
+MESSAGES = YAML.load_file('loan_calculator_messages.yml')
+puts MESSAGES.inspect
+LANGUAGE = 'en'
 # Car Payment Calculator
 # You need to take out a loan to buy a car.
 # How much do you pay back each month?
@@ -56,20 +60,27 @@
 # If interest is 0, monthly payment is equal to loan amount / loan duration (months)
 # If loan duration is less than 1, invalid input.
 
+def prompt(key, lang='en')
+  message = MESSAGES[lang][key] || key
+  puts ">> #{message}"
+end
+
 def calculate_monthly_payment(loan_amount, annual_interest, loan_duration)
 
 end
 
+loop do
+  prompt('loan_amount')
+  loan_amount = gets.chomp # Must be numeric
+  prompt('yearly_interest')
+  yearly_interest = gets.chomp
+  prompt('loan_duration')
+  prompt('loan_years')
+  loan_years = gets.chomp
+  prompt('loan_months')
+  loan_months = gets.chomp
+end
 
-puts "How much money are you borrowing? (in $)"
-loan_amount = gets.chomp # Must be numeric
-puts "What's the yearly interest rate? (in %)"
-yearly_interest = gets.chomp
-puts "How long do you have to pay off your loan?"
-puts "Years:"
-loan_years = gets.chomp
-puts "Months:"
-loan_months = gets.chomp
 
 puts "Given a loan amount of #{loan_amount}, a yearly interest rate of #{yearly_interest}" +
      ", and a loan duration of #{loan_years}, #{loan_months}:"
