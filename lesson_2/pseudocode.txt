@@ -1,0 +1,118 @@
+# A method that returns the sum of two integers:
+- Input: Two integers
+- Output: The sum of the two integers
+
+Save the two numbers to two variables, a and b.
+Add a and b together, save the result to a third variable, c.
+Return c.
+
+START
+SET a = first given number
+SET b = second given number 
+SET c = a + b 
+Return c
+END
+
+#####################
+
+# A method that takes an array of strings and returns a single string
+# consisting of all those strings concatenated.
+- Input: An array consisting of multiple strings.
+  - Assume the array items are all strings?
+- Output: A single string containing every string in the array, concatenated.
+
+-Initialize a variable pointing to an empty string "" (cat_string)
+-Iterate through the strings array. For each string:
+  - Append the current string to the cat_string variable.
+- Return the string variable.
+
+START
+Given an array of strings (strings = ['some', 'strings', 'yay'])
+SET cat_string = "" (Empty string)
+
+ITERATE strings |current_string|
+  cat_string = cat_string + current_string
+
+Return cat_string
+
+#####################
+
+# A method that takes an array of integers and returns a NEW array
+# with every other element from the original array (starting with the first)
+- Input: Array of integers [1, 4, 7, 2, 5]
+- Output: New array, every other element from the input array [1, 7, 5]
+
+- Initialize an empty array result []
+- Iterate through the input array of integers. For each:
+  - If the current iteration's index is even, push the current 
+    element to the result array.
+  - Otherwise, do nothing
+- Return the result array.
+
+START
+Given an array of integers array = [1, 4, 7, 2, 5]
+SET result = []
+ITERATE integers with index |integer, index|
+  IF index is even, add integer to result
+
+Return result
+END 
+
+#####################
+
+# A method that determines the index of the 3rd occurrence of a specified
+# character in a given string.
+- Input: Two strings:
+  - Full string (eg. 'axbxcdxex').
+  - Substring to search for the 3rd occurrence of (eg. 'x').
+- Output: An integer - the index of the substring's 3rd occurrence.
+  - If the given substring does not occur at least 3 times, return nil.
+-Data: Array (the full string)
+-Algorithm:
+  - Set a duplicates variable = 0 - Keep track of the number of times the substring appears
+  - Set a third_index variable = nil. To be returned.
+  - Iterate through each character of the full string. For each:
+    - If the current character is equal to the substring, increment duplicates by 1.
+    - If duplicates is equal to 3, set third_index to the current index, and break iteration.
+  - Return third_index (which should be nil if duplicates == 3 was never true)
+
+START
+Given string = 'axbxcdxex', substring = 'x'
+SET duplicates = 0 
+SET third_index = nil
+ITERATE string characters with index |character, index|
+  IF character == substring
+    duplicates = duplicates + 1 
+    IF duplicates == 3 
+      third_index = index
+      stop looping
+RETURN third_index
+END
+
+######################
+
+# A method that takes two arrays of numbers and returns a new array 
+# with elements interleaved - the elements of the first array should 
+# be at the even indexes, and the elements of the second array should be
+# at the odd indexes. 
+# Assume both arrays have the same number of elements.
+- Input: Two arrays of integers
+- Output: A new array. Elements are taken from each of the two arrays
+          in alternating order, starting with the first array.
+# eg. merge([1, 2, 3], [4, 5, 6]) # => [1, 4, 2, 5, 3, 6]
+-Data: Two input arrays, one output array 
+-Algorithm:
+  - Set a result variable = [] (empty array, to be returned)
+  - Iterate through the first input array, with index. For each number:
+    - Push the current number to the result array.
+    - Push the corresponding number in the second array to the result array.
+  - Return result.
+
+START 
+Given array1 = [1,2,3], array2 = [4,5,6]
+SET result = []
+ITERATE array1 with index |number, index|
+  add number to result 
+  add array2[index] to result 
+RETURN result 
+END
