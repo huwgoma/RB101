@@ -1,6 +1,6 @@
 en:
-  loan_amount: 'How much money are you borrowing? (in $)'
-  yearly_interest: "What's the yearly interest rate? (in %)"
+  loan_amount: 'How much money are you borrowing? (in $; eg. 2000 -> $2000)'
+  yearly_interest: "What's the yearly interest rate? (in %; eg. 6 -> 6%)"
   loan_duration: 'How long do you have to pay off your loan?'
   loan_years: 'Years:'
   loan_months: 'Months:'

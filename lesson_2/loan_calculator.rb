@@ -15,7 +15,7 @@ def read_input(message)
   loop do
     prompt(message)
     input = gets.chomp
-    return input.to_f if valid_input?(input, message)
+    return input if valid_input?(input, message)
   end
 end
 
@@ -27,7 +27,7 @@ def read_duration_input(message)
     input[:years] = gets.chomp
     prompt('loan_months')
     input[:months] = gets.chomp
-    return input.transform_values(&:to_i) if valid_input?(input, message)
+    return input if valid_input?(input, message)
   end
 end
 
@@ -63,7 +63,7 @@ end
 
 def calculate_monthly_payment(amount, monthly_interest, months)
   return amount / months if monthly_interest.zero?
-  amount * (monthly_interest / (1 - (1 + monthly_interest)**(-(months))))
+  amount * (monthly_interest / (1 - (1 + monthly_interest)**(-months)))
 end
 
 def calculate_again?
@@ -78,16 +78,18 @@ end
 loop do
   system('clear')
   # Inputs
-  amount = read_input('loan_amount')
+  amount = read_input('loan_amount').to_f
 
-  yearly_interest = read_input('yearly_interest')
+  yearly_interest = read_input('yearly_interest').to_f
   monthly_interest = yearly_interest / 100 / 12
 
-  duration = read_duration_input('loan_duration')
+  duration = read_duration_input('loan_duration').transform_values(&:to_i)
   duration_in_months = (duration[:years] * 12) + duration[:months]
 
   # Outputs
-  monthly_payment = calculate_monthly_payment(amount, monthly_interest, duration_in_months).round(2)
+  monthly_payment = calculate_monthly_payment(amount,
+                                              monthly_interest,
+                                              duration_in_months).round(2)
   prompt('calculating')
   sleep 0.5
   output_message = <<-HEREDOC
