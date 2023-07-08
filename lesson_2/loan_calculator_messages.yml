@@ -5,3 +5,4 @@ en:
   loan_years: 'Years:'
   loan_months: 'Months:'
   valid_number: "Hm. That doesn't look like a valid number."
+  loan_amount_zero: "Loan amount must be more than 0!"

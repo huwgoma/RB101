@@ -39,7 +39,7 @@ LANGUAGE = 'en'
 #   - Loan Amount, in dollars. (eg. 1000.00) 
 #   - Yearly interest rate, in %. (eg. 6%)
 #   - Loan duration, in years and months. (eg. Years: 2, Months: 2) 
-# (Validate all of these inputs separately.)
+
 
 # Convert loan amount to a float
 # Convert loan years + months to only months (years * 12 + months)
@@ -72,21 +72,54 @@ def read_input(message)
   loop do
     prompt(message)
     input = gets.chomp
-    next prompt('valid_number') unless numeric?(input)
-    
-    input = input.to_f 
-    format_message = message.gsub('_', ' ').capitalize
-    next prompt("#{format_message} must be more than 0!") unless input.positive?
-    return input
+    return input.to_f if valid_input?(input, message)
   end
 end
+
+# (Validate all of these inputs separately.)
+# Validate Loan Amount:
+#   - Is the input a number? 
+#     - No -> "That doesn't look like a number."
+#     - Yes -> Is the input positive?
+#       - No -> "Can't be 0."
+
+# Validate Interest:
+#   - Is input numeric? No -> Not a number; 
+#                       Yes -> Is input negative?
+#                              -> No: Good. -> Yes: 'Can't be negative.
+
+# Validate Loan duration (Get both before validating):
+#   - Are both inputs numeric? No -> NaN;
+#                              Yes -> Is either input negative? -> Yes: Cant be neg
+#                                     Is at least one input positive?
+#
+def valid_input?(input, message)
+  case message
+  when 'loan_amount' then valid_loan_amount?(input)
+  end
+end
+
+def valid_loan_amount?(input)
+  return prompt('valid_number') unless numeric?(input)
+  return prompt('loan_amount_zero') unless input.to_f.positive?
+  true
+end
+
+
+
+
 
 def calculate_monthly_payment(loan_amount, annual_interest, loan_duration)
 
 end
 
+
+
+
+
 # Loan Amount
 loan_amount = read_input('loan_amount')
+p loan_amount
   
 
   # prompt('yearly_interest')
