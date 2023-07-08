@@ -65,22 +65,32 @@ def prompt(key, lang='en')
   puts ">> #{message}"
 end
 
+def numeric?(str)
+  !!(Integer(str) rescue false || Float(str) rescue false)
+end
+
 def calculate_monthly_payment(loan_amount, annual_interest, loan_duration)
 
 end
 
+loan_amount = nil
 loop do
   prompt('loan_amount')
-  loan_amount = gets.chomp # Must be numeric
-  prompt('yearly_interest')
-  yearly_interest = gets.chomp
-  prompt('loan_duration')
-  prompt('loan_years')
-  loan_years = gets.chomp
-  prompt('loan_months')
-  loan_months = gets.chomp
+  loan_amount = gets.chomp # Must be numeric; convert to float ; must be positive
+  break if numeric?(loan_amount)
+  puts "That doesn't seem like a valid number."
 end
 
+puts "#{loan_amount} is numeric!"
+  # prompt('yearly_interest')
+  # yearly_interest = gets.chomp # Must be numeric; convert to float
+  # prompt('loan_duration')
+  # prompt('loan_years')
+  # loan_years = gets.chomp # Must be numeric; convert to int
+  # prompt('loan_months')
+  # loan_months = gets.chomp # Must be numeric; convert to int
 
-puts "Given a loan amount of #{loan_amount}, a yearly interest rate of #{yearly_interest}" +
-     ", and a loan duration of #{loan_years}, #{loan_months}:"
+
+
+# puts "Given a loan amount of #{loan_amount}, a yearly interest rate of #{yearly_interest}" +
+#     ", and a loan duration of #{loan_years}, #{loan_months}:"
