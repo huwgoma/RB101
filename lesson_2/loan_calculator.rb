@@ -64,7 +64,7 @@ end
 
 def calculate_monthly_payment(amount, monthly_interest, months)
   return amount / months if monthly_interest.zero?
-  amount * (monthly_interest / (1 - (1 + monthly_interest)**(-months)))
+  amount * (monthly_interest / (1 - ((1 + monthly_interest)**(-months))))
 end
 
 def calculate_again?
