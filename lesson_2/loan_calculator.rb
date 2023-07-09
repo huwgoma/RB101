@@ -49,14 +49,24 @@ def valid_input?(input, message)
 end
 
 def valid_loan_amount?(input)
-  return prompt('valid_number') unless numeric?(input)
-  return prompt('loan_amount_zero') unless input.to_f.positive?
+  if !numeric?(input)
+    prompt('valid_number')
+    return false
+  elsif input.to_f <= 0
+    prompt('loan_amount_zero')
+    return false
+  end
   true
 end
 
 def valid_interest?(input)
-  return prompt('valid_number') unless numeric?(input)
-  return prompt('interest_negative') if input.to_f.negative?
+  if !numeric?(input)
+    prompt('valid_number')
+    return false
+  elsif input.to_f.negative?
+    prompt('interest_negative')
+    return false
+  end
   true
 end
 
@@ -65,10 +75,24 @@ def valid_loan_duration?(input)
     prompt('loan_duration_integer')
     return false
   end
+
   values = input.values.map(&:to_i)
-  return prompt('loan_duration_negative') if values.any?(&:negative?)
-  return prompt('loan_duration_zero') if values.none?(&:positive?)
+  if any_negative?(values)
+    prompt('loan_duration_negative')
+    return false
+  elsif none_positive?(values)
+    prompt('loan_duration_zero')
+    return false
+  end
   true
+end
+
+def any_negative?(values)
+  values.any?(&:negative?)
+end
+
+def none_positive?(values)
+  values.none?(&:positive?)
 end
 
 def calculate_monthly_payment(amount, monthly_interest, months)
