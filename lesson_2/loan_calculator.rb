@@ -9,7 +9,7 @@ def prompt(key, lang='en')
 end
 
 def integer?(str)
-  str.to_i.to_s == str 
+  str.to_i.to_s == str
 end
 
 def float?(str)
@@ -62,7 +62,8 @@ end
 
 def valid_loan_duration?(input)
   unless integer?(input[:years]) && integer?(input[:months])
-    return prompt('loan_duration_integer')
+    prompt('loan_duration_integer')
+    return false
   end
   values = input.values.map(&:to_i)
   return prompt('loan_duration_negative') if values.any?(&:negative?)
@@ -73,6 +74,19 @@ end
 def calculate_monthly_payment(amount, monthly_interest, months)
   return amount / months if monthly_interest.zero?
   amount * (monthly_interest / (1 - ((1 + monthly_interest)**(-months))))
+end
+
+def display_summary(amount, yearly_interest, duration, monthly_payment)
+  prompt('calculating')
+  sleep 0.5
+  output_message = <<-HEREDOC
+Given a loan amount of $#{amount},
+   a yearly interest rate of #{yearly_interest}%,
+   and a loan duration of #{duration[:years]} years, #{duration[:months]} months:
+
+   Your monthly payments will be $#{monthly_payment}.
+  HEREDOC
+  prompt(output_message)
 end
 
 def calculate_again?
@@ -99,16 +113,7 @@ loop do
   monthly_payment = calculate_monthly_payment(amount,
                                               monthly_interest,
                                               duration_in_months).round(2)
-  prompt('calculating')
-  sleep 0.5
-  output_message = <<-HEREDOC
-Given a loan amount of $#{amount},
-   a yearly interest rate of #{yearly_interest}%,
-   and a loan duration of #{duration[:years]} years, #{duration[:months]} months:
-
-   Your monthly payments will be $#{monthly_payment}.
-  HEREDOC
-  prompt(output_message)
+  display_summary(amount, yearly_interest, duration, monthly_payment)
 
   # Again?
   break unless calculate_again?
