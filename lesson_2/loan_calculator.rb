@@ -8,8 +8,16 @@ def prompt(key, lang='en')
   puts ">> #{message}"
 end
 
+def integer?(str)
+  str.to_i.to_s == str 
+end
+
+def float?(str)
+  str.to_f.to_s == str
+end
+
 def numeric?(str)
-  !!(Integer(str) rescue false || Float(str) rescue false)
+  integer?(str) || float?(str)
 end
 
 def read_input(message)
