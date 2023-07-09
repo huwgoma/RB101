@@ -61,8 +61,8 @@ def valid_interest?(input)
 end
 
 def valid_loan_duration?(input)
-  unless numeric?(input[:years]) && numeric?(input[:months])
-    return prompt('valid_number')
+  unless integer?(input[:years]) && integer?(input[:months])
+    return prompt('loan_duration_integer')
   end
   values = input.values.map(&:to_i)
   return prompt('loan_duration_negative') if values.any?(&:negative?)
