@@ -1,8 +1,11 @@
-# Ask user to choose (RPS)
-# Computer chooses
-# Display result
-# Ask if play again
-# RPS_CHOICES = ['rock', 'paper', 'scissors']
+# r -> Rock
+# s? -> Scissors or Spock?
+
+# Keeping score (best of 5)
+
+# Welcome message
+# Input validation for exit loop
+# Extract messages to .yml file
 RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
                 paper: { wins_against: [:rock, :spock] },
                 scissors: { wins_against: [:paper, :lizard] },
@@ -12,6 +15,8 @@ RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
 def prompt(message)
   puts ">> #{message}"
 end
+
+def convert_input
 
 def display_result(choice, computer)
   result = calculate_result(choice, computer)
