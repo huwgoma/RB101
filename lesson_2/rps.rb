@@ -3,13 +3,11 @@
 # Display result
 # Ask if play again
 # RPS_CHOICES = ['rock', 'paper', 'scissors']
-RPS_CHOICES = { rock: { wins_against: :scissors, loses_to: :paper },
-                paper: { wins_against: :rock, loses_to: :scissors },
-                scissors: { wins_against: :paper, loses_to: :rock } }
-
-def test_method
-  prompt('test')
-end
+RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
+                paper: { wins_against: [:rock, :spock] },
+                scissors: { wins_against: [:paper, :lizard] },
+                lizard: { wins_against: [:spock, :paper] },
+                spock: { wins_against: [:scissors, :rock] } }
 
 def prompt(message)
   puts ">> #{message}"
@@ -24,14 +22,15 @@ end
 def calculate_result(choice, computer)
   return "Tie!" if choice == computer
 
-  if computer == RPS_CHOICES[choice][:loses_to]
+  if RPS_CHOICES[computer][:wins_against].include?(choice)
     "Computer wins!"
-  elsif computer == RPS_CHOICES[choice][:wins_against]
+  elsif RPS_CHOICES[choice][:wins_against].include?(computer)
     "You win!"
   end
 end
 
 loop do
+  system('clear')
   choice = nil
   loop do
     prompt("Choose your throw: #{RPS_CHOICES.keys.join(', ')}")
