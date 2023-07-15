@@ -1,28 +1,31 @@
+require 'yaml'
+MESSAGES = YAML.load_file('rps_messages.yml')
+LANGUAGE = 'en'
 
-# Extract messages to .yml file
 RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
                 paper: { wins_against: [:rock, :spock] },
                 scissors: { wins_against: [:paper, :lizard] },
                 lizard: { wins_against: [:spock, :paper] },
                 spock: { wins_against: [:scissors, :rock] } }
 
-def prompt(message)
+def prompt(key)
+  message = MESSAGES[LANGUAGE][key] || key
   puts ">> #{message}"
 end
 
 def read_name
   loop do
-    prompt("What's your name?")
+    prompt('name?')
     input = gets.chomp
     return input unless input.empty?
-    prompt("Surely you do have a name?")
+    prompt('invalid_name')
   end
 end
 
 def read_input
   loop do
     prompt("Choose your weapon: #{RPS_CHOICES.keys.join(', ')}")
-    prompt("You can also enter a shorthand choice (eg. 'r' -> 'rock')")
+    prompt('shorthand')
     choice = gets.chomp.downcase.to_sym
 
     return match_input(choice) if valid_input?(choice)
@@ -51,9 +54,9 @@ def generate_error(input)
   matching_keys = RPS_CHOICES.keys.select { |key| key.start_with?(input.to_s) }
 
   if matching_keys.empty?
-    "That's not a valid choice!"
+    'invalid_rps_choice'
   elsif matching_keys.size > 1
-    str = "Sorry, that wasn't clear enough. Did you mean one of these?\n"
+    str = MESSAGES[LANGUAGE]['more_than_one'].dup
     matching_keys.each { |key| str.concat(key.to_s, "\n") }
     str
   end
@@ -61,9 +64,9 @@ end
 
 def display_result(user_choice, computer_choice, winner)
   prompt("You chose #{user_choice}; computer chose #{computer_choice}.")
-  return prompt("It's a tie :|") if winner.nil?
+  return prompt('tie') if winner.nil?
 
-  prompt (winner == 'User') ? 'You win! :)' : 'Computer wins :(' 
+  prompt (winner == 'User') ? 'user_win' : 'computer_win' 
 end
 
 def calculate_winner(user_choice, computer_choice)
@@ -93,15 +96,14 @@ end
 
 def play_again?
   loop do
-    prompt('Play again? (Y/N)')
+    prompt('play_again?')
     answer = gets.chomp.downcase
     return answer == 'y' if %w[y n].include?(answer)
-    prompt('Invalid input! Please enter Y for yes or N for no.')
+    prompt('invalid_again')
   end
 end
 
-system('clear')
-prompt("Welcome to Rock Paper Scissors!")
+prompt('welcome')
 name = read_name
 loop do
   system('clear')
@@ -130,4 +132,4 @@ loop do
   break unless play_again?
 end
 
-prompt('Thanks for playing. Goodbye!')
+prompt("Thanks for playing, #{name}. Goodbye!")

@@ -1,0 +1,14 @@
+en:
+  welcome: 'Welcome to Rock Paper Scissors Lizard Spock!'
+  name?: "What's your name?"
+  invalid_name: 'Surely you do have a name?'
+
+  shorthand: "You can also enter a shorthand! (eg. 'r' -> 'rock')"
+  invalid_rps_choice: "That's not a valid option!"
+  more_than_one: "Sorry, that wasn't quite clear enough. Did you mean one of these?\n"
+  tie: "It's a tie! :|"
+  user_win: 'You win! :]'
+  computer_win: 'Computer wins. :['
+
+  play_again?: 'Play again? (Y/N)'
+  invalid_again: 'Invalid input! Please enter Y for yes or N for no.'
