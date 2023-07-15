@@ -66,8 +66,31 @@ def expand_input(input)
   RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
 end
 
-def display_error()
 
+# input: a symbol input. should be invalid, somehow
+# output: prints a string specific to the error.
+# if (the input is not included in rpsc) or none of rpsc starts with the input,
+#   -> "That's not a valid choice!"
+# if more than one key starts with the input,
+#   -> "Sorry, that wasn't clear enough. Did you mean:" (Print all matches)
+        # Iterate through rpsc and print all the keys that start with the input
+def calculate_error(input)
+  matching_keys = RPS_CHOICES.keys.select { |key| key.start_with?(input.to_s) }
+
+  
+  if matching_keys.empty?
+    "That's not a valid choice!"
+  elsif matching_keys.size > 1
+    <<-HEREDOC
+Sorry, that wasn't clear enough. Did you mean one of these choices?
+    #{matching_keys.join("\n")}
+    HEREDOC
+  end
+end
+
+def display_error(input)
+  error_string = calculate_error(input)
+  prompt(error_string)
 end
 
 loop do
@@ -76,13 +99,12 @@ loop do
   loop do
     prompt("Choose your throw: #{RPS_CHOICES.keys.join(', ')}")
     choice = gets.chomp.downcase.to_sym
-    if valid_input?(choice)
-      choice = expand_input(choice)
-      break
-    end
-    prompt("That's not a valid choice!")
+    
+    break if valid_input?(choice)
+    display_error(choice)
   end
 
+  choice = expand_input(choice)
   computer = RPS_CHOICES.keys.sample
 
   display_result(choice, computer)
