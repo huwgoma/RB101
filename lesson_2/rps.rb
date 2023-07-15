@@ -81,7 +81,19 @@ end
 def display_game_end(winner, scores)
   winning_score = scores.max
   losing_score = scores.min
+  # Possibly customize this
   prompt("#{winner} wins with a score of #{winning_score}-#{losing_score}!")
+end
+
+def play_again?
+  answer = nil
+  loop do
+    prompt('Play again? (Y/N)')
+    answer = gets.chomp.downcase
+    break if %w[y n].include?(answer)
+    prompt('Invalid input! Please enter Y for yes or N for no.')
+  end
+  answer == 'y'
 end
 
 prompt("Welcome to Rock Paper Scissors!")
@@ -106,11 +118,10 @@ loop do
 
     break if user_score == 3 || computer_score == 3
   end
+
   display_game_end(winner, [user_score, computer_score])
 
-  prompt('Play again?(Y/N)')
-  answer = gets.chomp
-  break unless answer.downcase == 'y'
+  break unless play_again?
 end
 
 prompt('Thanks for playing. Goodbye!')
