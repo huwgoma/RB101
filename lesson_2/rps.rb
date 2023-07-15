@@ -78,16 +78,22 @@ def display_score(user_score, computer_score)
   prompt("You: #{user_score}, Computer: #{computer_score}")
 end
 
+def display_game_end(winner, scores)
+  winning_score = scores.max
+  losing_score = scores.min
+  prompt("#{winner} wins with a score of #{winning_score}-#{losing_score}!")
+end
+
 prompt("Welcome to Rock Paper Scissors!")
 loop do
-  system('clear')
+  
   user_score = 0
   computer_score = 0
   winner = nil
 
   loop do
     user_choice = read_input
-
+    system('clear')
     computer_choice = RPS_CHOICES.keys.sample
 
     winner = calculate_winner(user_choice, computer_choice)
@@ -100,10 +106,8 @@ loop do
 
     break if user_score == 3 || computer_score == 3
   end
+  display_game_end(winner, [user_score, computer_score])
 
-  winning_score = [user_score, computer_score].max
-  losing_score = [user_score, computer_score].min
-  prompt("#{winner} wins with a score of #{winning_score}-#{losing_score}!")
   prompt('Play again?(Y/N)')
   answer = gets.chomp
   break unless answer.downcase == 'y'
