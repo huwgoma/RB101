@@ -62,34 +62,24 @@ def valid_shorthand?(input)
   RPS_CHOICES.keys.one? { |key| key.start_with?(input.to_s) }
 end
 
-def expand_input(input)
+def match_input(input)
   RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
 end
 
-
-# input: a symbol input. should be invalid, somehow
-# output: prints a string specific to the error.
-# if (the input is not included in rpsc) or none of rpsc starts with the input,
-#   -> "That's not a valid choice!"
-# if more than one key starts with the input,
-#   -> "Sorry, that wasn't clear enough. Did you mean:" (Print all matches)
-        # Iterate through rpsc and print all the keys that start with the input
-def calculate_error(input)
+def generate_error(input)
   matching_keys = RPS_CHOICES.keys.select { |key| key.start_with?(input.to_s) }
 
-  
   if matching_keys.empty?
     "That's not a valid choice!"
   elsif matching_keys.size > 1
-    <<-HEREDOC
-Sorry, that wasn't clear enough. Did you mean one of these choices?
-    #{matching_keys.join("\n")}
-    HEREDOC
+    str = "Sorry, that wasn't clear enough. Did you mean one of these?\n"
+    matching_keys.each { |key| str.concat(key.to_s, "\n") }
+    str
   end
 end
 
 def display_error(input)
-  error_string = calculate_error(input)
+  error_string = generate_error(input)
   prompt(error_string)
 end
 
@@ -98,13 +88,14 @@ loop do
   choice = nil
   loop do
     prompt("Choose your throw: #{RPS_CHOICES.keys.join(', ')}")
+    prompt("You can also enter a shorthand choice (eg. 'r' -> 'rock')")
     choice = gets.chomp.downcase.to_sym
     
     break if valid_input?(choice)
     display_error(choice)
   end
 
-  choice = expand_input(choice)
+  choice = match_input(choice)
   computer = RPS_CHOICES.keys.sample
 
   display_result(choice, computer)
