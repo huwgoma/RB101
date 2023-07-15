@@ -54,13 +54,15 @@ def generate_error(input)
   end
 end
 
-def display_result(user_choice, computer_choice, result)
+def display_result(user_choice, computer_choice, winner)
   prompt("You chose #{user_choice}; computer chose #{computer_choice}.")
-  prompt(result)
+  return prompt("It's a tie :|") if winner.nil?
+
+  prompt (winner == 'User') ? 'You win! :)' : 'Computer wins :(' 
 end
 
-def calculate_result(user_choice, computer_choice)
-  return 'Tie' if tie?(user_choice, computer_choice)
+def calculate_winner(user_choice, computer_choice)
+  return if tie?(user_choice, computer_choice)
   user_win?(user_choice, computer_choice) ? 'User' : 'Computer'
 end
 
@@ -73,7 +75,7 @@ def user_win?(user_choice, computer_choice)
 end
 
 def increment_score(result, user_score, computer_score)
-
+  
 end
 
 loop do
@@ -87,18 +89,20 @@ loop do
     # generate computer choice
     computer_choice = RPS_CHOICES.keys.sample
     # calculate the result
-    result = calculate_result(user_choice, computer_choice)
+    winner = calculate_winner(user_choice, computer_choice)
     # display the result
-    display_result(user_choice, computer_choice, result)
+    display_result(user_choice, computer_choice, winner)
     # increment either player score or computer score, 
     #   based on the result (who won)
-    increment_score(result, user_score, computer_score)
+    increment_score(winner, user_score, computer_score)
+    #numbers are immutable
+
     # if either player/computer score == 3, break loop
     # and display the winner
     # then ask if user wants to play again
 
 
-    break if player_score == 3 || computer_score == 3
+    break if user_score == 3 || computer_score == 3
   end
 end
 
