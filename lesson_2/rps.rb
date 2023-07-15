@@ -57,6 +57,7 @@ def generate_error(input)
     'invalid_rps_choice'
   elsif matching_keys.size > 1
     str = MESSAGES[LANGUAGE]['more_than_one'].dup
+    # Create a copy to avoid mutating the actual string in MESSAGES
     matching_keys.each { |key| str.concat(key.to_s, "\n") }
     str
   end
@@ -66,7 +67,7 @@ def display_result(user_choice, computer_choice, winner)
   prompt("You chose #{user_choice}; computer chose #{computer_choice}.")
   return prompt('tie') if winner.nil?
 
-  prompt (winner == 'User') ? 'user_win' : 'computer_win' 
+  prompt winner == 'User' ? 'user_win' : 'computer_win'
 end
 
 def calculate_winner(user_choice, computer_choice)
@@ -82,8 +83,8 @@ def user_win?(user_choice, computer_choice)
   RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
 end
 
-def display_score(user_score, computer_score, name)
-  prompt("#{name}: #{user_score}, Computer: #{computer_score}")
+def display_score(scores, name)
+  prompt("#{name}: #{scores[:user]}, Computer: #{scores[:computer]}")
 end
 
 def display_game_end(winner, name, scores)
@@ -107,8 +108,7 @@ prompt('welcome')
 name = read_name
 loop do
   system('clear')
-  user_score = 0
-  computer_score = 0
+  scores = { user: 0, computer: 0 }
   winner = nil
 
   loop do
@@ -117,17 +117,15 @@ loop do
     computer_choice = RPS_CHOICES.keys.sample
 
     winner = calculate_winner(user_choice, computer_choice)
-
     display_result(user_choice, computer_choice, winner)
 
-    user_score += 1 if winner == 'User'
-    computer_score += 1 if winner == 'Computer'
-    display_score(user_score, computer_score, name)
+    scores[winner.downcase.to_sym] += 1 unless winner.nil?
+    display_score(scores, name)
 
-    break if user_score == 3 || computer_score == 3
+    break if scores.values.any? { |score| score >= 3 }
   end
 
-  display_game_end(winner, name, [user_score, computer_score])
+  display_game_end(winner, name, scores.values)
 
   break unless play_again?
 end
