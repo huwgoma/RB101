@@ -71,6 +71,11 @@ def user_win?(user_choice, computer_choice)
   RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
 end
 
+def increment_score(winner, scores)
+  return if winner.nil?
+  scores[winner.downcase.to_sym] += 1
+end
+
 def match_end?(scores)
   scores.any? { |score| score >= WINNING_SCORE }
 end
@@ -128,7 +133,7 @@ loop do
     winner = calculate_winner(user_choice, computer_choice)
     display_result(user_choice, computer_choice, winner)
 
-    scores[winner.downcase.to_sym] += 1 unless winner.nil?
+    increment_score(winner, scores)
     display_score(scores, name)
 
     break if match_end?(scores.values)
