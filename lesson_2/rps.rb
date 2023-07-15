@@ -57,7 +57,7 @@ def match_input(input)
   RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
 end
 
-# Winner Logic
+# Game Logic
 def calculate_winner(user_choice, computer_choice)
   return if tie?(user_choice, computer_choice)
   user_win?(user_choice, computer_choice) ? 'User' : 'Computer'
@@ -69,6 +69,10 @@ end
 
 def user_win?(user_choice, computer_choice)
   RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
+end
+
+def match_end?(scores)
+  scores.any? { |score| score >= WINNING_SCORE }
 end
 
 # Outputs
@@ -83,7 +87,7 @@ def generate_error(input)
   if matching_keys.empty?
     'invalid_rps_choice'
   elsif matching_keys.size > 1
-    # Create a copy to avoid mutating the actual string in MESSAGES
+    # Create a copy to avoid mutating the original string in MESSAGES
     str = MESSAGES[LANGUAGE]['more_than_one'].dup
     str.concat(matching_keys.join("\n"))
   end
@@ -100,7 +104,7 @@ def display_score(scores, name)
   prompt("#{name}: #{scores[:user]}, Computer: #{scores[:computer]}")
 end
 
-def display_game_end(winner, name, scores)
+def display_match_end(winner, name, scores)
   winning_score = scores.max
   losing_score = scores.min
 
@@ -127,10 +131,10 @@ loop do
     scores[winner.downcase.to_sym] += 1 unless winner.nil?
     display_score(scores, name)
 
-    break if scores.values.any? { |score| score >= WINNING_SCORE }
+    break if match_end?(scores.values)
   end
 
-  display_game_end(winner, name, scores.values)
+  display_match_end(winner, name, scores.values)
   break unless play_again?
 end
 

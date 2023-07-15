@@ -11,4 +11,4 @@ en:
   computer_win: 'Computer wins. :['
 
   play_again?: 'Play again? (Y/N)'
-  invalid_again: 'Invalid input! Please enter Y for yes or N for no.'
+  invalid_again: 'Please enter Y for yes or N for no.'
