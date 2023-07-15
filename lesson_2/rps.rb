@@ -1,8 +1,4 @@
 
-# Keeping score (best of 5)
-
-# Welcome message
-# Input validation for exit loop
 # Extract messages to .yml file
 RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
                 paper: { wins_against: [:rock, :spock] },
@@ -12,6 +8,15 @@ RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
 
 def prompt(message)
   puts ">> #{message}"
+end
+
+def read_name
+  loop do
+    prompt("What's your name?")
+    input = gets.chomp
+    return input unless input.empty?
+    prompt("Surely you do have a name?")
+  end
 end
 
 def read_input
@@ -74,31 +79,32 @@ def user_win?(user_choice, computer_choice)
   RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
 end
 
-def display_score(user_score, computer_score)
-  prompt("You: #{user_score}, Computer: #{computer_score}")
+def display_score(user_score, computer_score, name)
+  prompt("#{name}: #{user_score}, Computer: #{computer_score}")
 end
 
-def display_game_end(winner, scores)
+def display_game_end(winner, name, scores)
   winning_score = scores.max
   losing_score = scores.min
-  # Possibly customize this
+
+  winner = winner == 'User' ? name : 'Computer'
   prompt("#{winner} wins with a score of #{winning_score}-#{losing_score}!")
 end
 
 def play_again?
-  answer = nil
   loop do
     prompt('Play again? (Y/N)')
     answer = gets.chomp.downcase
-    break if %w[y n].include?(answer)
+    return answer == 'y' if %w[y n].include?(answer)
     prompt('Invalid input! Please enter Y for yes or N for no.')
   end
-  answer == 'y'
 end
 
+system('clear')
 prompt("Welcome to Rock Paper Scissors!")
+name = read_name
 loop do
-  
+  system('clear')
   user_score = 0
   computer_score = 0
   winner = nil
@@ -114,12 +120,12 @@ loop do
 
     user_score += 1 if winner == 'User'
     computer_score += 1 if winner == 'Computer'
-    display_score(user_score, computer_score)
+    display_score(user_score, computer_score, name)
 
     break if user_score == 3 || computer_score == 3
   end
 
-  display_game_end(winner, [user_score, computer_score])
+  display_game_end(winner, name, [user_score, computer_score])
 
   break unless play_again?
 end
