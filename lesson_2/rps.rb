@@ -74,51 +74,39 @@ def user_win?(user_choice, computer_choice)
   RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
 end
 
-def increment_score(result, user_score, computer_score)
-  
+def display_score(user_score, computer_score)
+  prompt("You: #{user_score}, Computer: #{computer_score}")
 end
 
+prompt("Welcome to Rock Paper Scissors!")
 loop do
   system('clear')
   user_score = 0
   computer_score = 0
+  winner = nil
 
   loop do
-    # get input -> user choice
     user_choice = read_input
-    # generate computer choice
+
     computer_choice = RPS_CHOICES.keys.sample
-    # calculate the result
+
     winner = calculate_winner(user_choice, computer_choice)
-    # display the result
+
     display_result(user_choice, computer_choice, winner)
-    # increment either player score or computer score, 
-    #   based on the result (who won)
-    increment_score(winner, user_score, computer_score)
-    #numbers are immutable
 
-    # if either player/computer score == 3, break loop
-    # and display the winner
-    # then ask if user wants to play again
-
+    user_score += 1 if winner == 'User'
+    computer_score += 1 if winner == 'Computer'
+    display_score(user_score, computer_score)
 
     break if user_score == 3 || computer_score == 3
   end
+
+  winning_score = [user_score, computer_score].max
+  losing_score = [user_score, computer_score].min
+  prompt("#{winner} wins with a score of #{winning_score}-#{losing_score}!")
+  prompt('Play again?(Y/N)')
+  answer = gets.chomp
+  break unless answer.downcase == 'y'
 end
 
-
-
-# loop do
-#   system('clear')
-
-#   choice = read_input
-#   computer = RPS_CHOICES.keys.sample
-
-#   display_result(choice, computer)
-
-#   prompt('Play again? (Y/N)')
-#   answer = gets.chomp
-#   break unless answer.downcase == 'y'
-# end
-
-# prompt('Thanks for playing. Goodbye!')
+prompt('Thanks for playing. Goodbye!')
