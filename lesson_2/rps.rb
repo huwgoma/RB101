@@ -1,28 +1,3 @@
-# Allow the user to (optionally) type shorthand version
-# while maintaining ability to type full version
-# eg. 'r' or 'rock' -> :rock
-# edge: 's' -> spock or scissors?
-#       'sc' or 'scissors' -> :scissors
-#       'sp' or 'spock' -> :spock
-# Expand validation method to allow shorthand too
-# If input is shorthand, will need to convert to full 
-# 1) get input from user; downcase and convert to symbol
-# 2) break input validation loop if the input is a valid one.
-#   - What counts as a valid_input?
-#     - If the input is included in rps keys (rock paper scissors lizard spock)
-#     - OR if any of the rps keys STARTS WITH the input 
-#        - Edge case 's': (Any input where there are multiple possible fulls)
-#           "Sorry, that was unclear. Do you mean:
-#             - spock?
-#             - scissors? "
-#           = Update OR condition: If ONE and exactly one rps key
-#             starts with the input
-#           If none start with the input: That doesn't look like a valid choice sry
-#           If more than one: Sorry, there are multiple possible options idk
-#              Print all the options that do start with the input
-
-
-
 
 # Keeping score (best of 5)
 
@@ -48,12 +23,6 @@ def read_input
     return match_input(choice) if valid_input?(choice)
     display_error(choice)
   end
-end
-
-def display_result(choice, computer)
-  result = calculate_result(choice, computer)
-  prompt("You chose #{choice}; computer chose #{computer}.")
-  prompt(result)
 end
 
 def valid_input?(input)
@@ -85,26 +54,67 @@ def generate_error(input)
   end
 end
 
-def calculate_result(choice, computer)
-  return "Tie!" if choice == computer
-  if RPS_CHOICES[computer][:wins_against].include?(choice)
-    "Computer wins!"
-  elsif RPS_CHOICES[choice][:wins_against].include?(computer)
-    "You win!"
-  end
+def display_result(user_choice, computer_choice, result)
+  prompt("You chose #{user_choice}; computer chose #{computer_choice}.")
+  prompt(result)
+end
+
+def calculate_result(user_choice, computer_choice)
+  return 'Tie' if tie?(user_choice, computer_choice)
+  user_win?(user_choice, computer_choice) ? 'User' : 'Computer'
+end
+
+def tie?(user_choice, computer_choice)
+  user_choice == computer_choice
+end
+
+def user_win?(user_choice, computer_choice)
+  RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
+end
+
+def increment_score(result, user_score, computer_score)
+
 end
 
 loop do
   system('clear')
+  user_score = 0
+  computer_score = 0
 
-  choice = read_input
-  computer = RPS_CHOICES.keys.sample
+  loop do
+    # get input -> user choice
+    user_choice = read_input
+    # generate computer choice
+    computer_choice = RPS_CHOICES.keys.sample
+    # calculate the result
+    result = calculate_result(user_choice, computer_choice)
+    # display the result
+    display_result(user_choice, computer_choice, result)
+    # increment either player score or computer score, 
+    #   based on the result (who won)
+    increment_score(result, user_score, computer_score)
+    # if either player/computer score == 3, break loop
+    # and display the winner
+    # then ask if user wants to play again
 
-  display_result(choice, computer)
 
-  prompt('Play again? (Y/N)')
-  answer = gets.chomp
-  break unless answer.downcase == 'y'
+    break if player_score == 3 || computer_score == 3
+  end
 end
 
-prompt('Thanks for playing. Goodbye!')
+
+
+# loop do
+#   system('clear')
+
+#   choice = read_input
+#   computer = RPS_CHOICES.keys.sample
+
+#   display_result(choice, computer)
+
+#   prompt('Play again? (Y/N)')
+#   answer = gets.chomp
+#   break unless answer.downcase == 'y'
+# end
+
+# prompt('Thanks for playing. Goodbye!')
