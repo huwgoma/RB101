@@ -82,10 +82,9 @@ def generate_error(input)
   if matching_keys.empty?
     'invalid_rps_choice'
   elsif matching_keys.size > 1
-    str = MESSAGES[LANGUAGE]['more_than_one'].dup
     # Create a copy to avoid mutating the actual string in MESSAGES
-    matching_keys.each { |key| str.concat(key.to_s, "\n") }
-    str
+    str = MESSAGES[LANGUAGE]['more_than_one'].dup
+    str.concat(matching_keys.join("\n"))
   end
 end
 
