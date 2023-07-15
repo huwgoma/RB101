@@ -39,19 +39,21 @@ def prompt(message)
   puts ">> #{message}"
 end
 
+def read_input
+  loop do
+    prompt("Choose your weapon: #{RPS_CHOICES.keys.join(', ')}")
+    prompt("You can also enter a shorthand choice (eg. 'r' -> 'rock')")
+    choice = gets.chomp.downcase.to_sym
+
+    return match_input(choice) if valid_input?(choice)
+    display_error(choice)
+  end
+end
+
 def display_result(choice, computer)
   result = calculate_result(choice, computer)
   prompt("You chose #{choice}; computer chose #{computer}.")
   prompt(result)
-end
-
-def calculate_result(choice, computer)
-  return "Tie!" if choice == computer
-  if RPS_CHOICES[computer][:wins_against].include?(choice)
-    "Computer wins!"
-  elsif RPS_CHOICES[choice][:wins_against].include?(computer)
-    "You win!"
-  end
 end
 
 def valid_input?(input)
@@ -66,6 +68,11 @@ def match_input(input)
   RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
 end
 
+def display_error(input)
+  error_string = generate_error(input)
+  prompt(error_string)
+end
+
 def generate_error(input)
   matching_keys = RPS_CHOICES.keys.select { |key| key.start_with?(input.to_s) }
 
@@ -78,24 +85,19 @@ def generate_error(input)
   end
 end
 
-def display_error(input)
-  error_string = generate_error(input)
-  prompt(error_string)
+def calculate_result(choice, computer)
+  return "Tie!" if choice == computer
+  if RPS_CHOICES[computer][:wins_against].include?(choice)
+    "Computer wins!"
+  elsif RPS_CHOICES[choice][:wins_against].include?(computer)
+    "You win!"
+  end
 end
 
 loop do
   system('clear')
-  choice = nil
-  loop do
-    prompt("Choose your throw: #{RPS_CHOICES.keys.join(', ')}")
-    prompt("You can also enter a shorthand choice (eg. 'r' -> 'rock')")
-    choice = gets.chomp.downcase.to_sym
-    
-    break if valid_input?(choice)
-    display_error(choice)
-  end
 
-  choice = match_input(choice)
+  choice = read_input
   computer = RPS_CHOICES.keys.sample
 
   display_result(choice, computer)
