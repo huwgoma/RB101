@@ -7,6 +7,7 @@ RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
                 scissors: { wins_against: [:paper, :lizard] },
                 lizard: { wins_against: [:spock, :paper] },
                 spock: { wins_against: [:scissors, :rock] } }
+WINNING_SCORE = 3
 
 def prompt(key)
   message = MESSAGES[LANGUAGE][key] || key
@@ -126,7 +127,7 @@ loop do
     scores[winner.downcase.to_sym] += 1 unless winner.nil?
     display_score(scores, name)
 
-    break if scores.values.any? { |score| score >= 3 }
+    break if scores.values.any? { |score| score >= WINNING_SCORE }
   end
 
   display_game_end(winner, name, scores.values)
