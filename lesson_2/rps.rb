@@ -13,6 +13,7 @@ def prompt(key)
   puts ">> #{message}"
 end
 
+# Inputs
 def read_name
   loop do
     prompt('name?')
@@ -22,18 +23,28 @@ def read_name
   end
 end
 
-def read_input
+def read_choice
   loop do
     prompt("Choose your weapon: #{RPS_CHOICES.keys.join(', ')}")
     prompt('shorthand')
     choice = gets.chomp.downcase.to_sym
 
-    return match_input(choice) if valid_input?(choice)
+    return match_input(choice) if valid_choice?(choice)
     display_error(choice)
   end
 end
 
-def valid_input?(input)
+def play_again?
+  loop do
+    prompt('play_again?')
+    answer = gets.chomp.downcase
+    return answer == 'y' if %w[y n].include?(answer)
+    prompt('invalid_again')
+  end
+end
+
+# Input validation & processing
+def valid_choice?(input)
   RPS_CHOICES.keys.include?(input) || valid_shorthand?(input)
 end
 
@@ -45,6 +56,21 @@ def match_input(input)
   RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
 end
 
+# Winner Logic
+def calculate_winner(user_choice, computer_choice)
+  return if tie?(user_choice, computer_choice)
+  user_win?(user_choice, computer_choice) ? 'User' : 'Computer'
+end
+
+def tie?(user_choice, computer_choice)
+  user_choice == computer_choice
+end
+
+def user_win?(user_choice, computer_choice)
+  RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
+end
+
+# Outputs
 def display_error(input)
   error_string = generate_error(input)
   prompt(error_string)
@@ -70,19 +96,6 @@ def display_result(user_choice, computer_choice, winner)
   prompt winner == 'User' ? 'user_win' : 'computer_win'
 end
 
-def calculate_winner(user_choice, computer_choice)
-  return if tie?(user_choice, computer_choice)
-  user_win?(user_choice, computer_choice) ? 'User' : 'Computer'
-end
-
-def tie?(user_choice, computer_choice)
-  user_choice == computer_choice
-end
-
-def user_win?(user_choice, computer_choice)
-  RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
-end
-
 def display_score(scores, name)
   prompt("#{name}: #{scores[:user]}, Computer: #{scores[:computer]}")
 end
@@ -95,15 +108,7 @@ def display_game_end(winner, name, scores)
   prompt("#{winner} wins with a score of #{winning_score}-#{losing_score}!")
 end
 
-def play_again?
-  loop do
-    prompt('play_again?')
-    answer = gets.chomp.downcase
-    return answer == 'y' if %w[y n].include?(answer)
-    prompt('invalid_again')
-  end
-end
-
+# Main Program Loop
 prompt('welcome')
 name = read_name
 loop do
@@ -112,7 +117,7 @@ loop do
   winner = nil
 
   loop do
-    user_choice = read_input
+    user_choice = read_choice
     system('clear')
     computer_choice = RPS_CHOICES.keys.sample
 
@@ -126,7 +131,6 @@ loop do
   end
 
   display_game_end(winner, name, scores.values)
-
   break unless play_again?
 end
 
