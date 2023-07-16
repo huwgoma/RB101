@@ -1,5 +1,16 @@
 en:
-  welcome: 'Welcome to Rock Paper Scissors Lizard Spock!'
+  welcome: >
+    Welcome to Rock Paper Scissors Lizard Spock!
+
+    The rules of this variation on Rock-Paper-Scissors are as follows:
+
+    Scissors cuts Paper, Paper covers Rock, Rock crushes Lizard,
+
+    Lizard poisons Spock, Spock smashes Scissors, Scissors decapitates Lizard,
+    
+    Lizard eats Paper, Paper disproves Spock, Spock vaporizes Rock,
+    
+    and Rock, as it always has, crushes Scissors.
   name?: "What's your name?"
   invalid_name: 'Surely you do have a name?'
 

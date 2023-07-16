@@ -19,7 +19,7 @@ def read_name
   loop do
     prompt('name?')
     input = gets.chomp
-    return input unless input.empty?
+    return input unless input.strip.empty?
     prompt('invalid_name')
   end
 end
