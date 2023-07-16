@@ -30,7 +30,7 @@ def read_choice
     prompt('shorthand')
     choice = gets.chomp.downcase.to_sym
 
-    return match_input(choice) if valid_choice?(choice)
+    return choice if valid_choice?(choice)
     display_error(choice)
   end
 end
@@ -53,7 +53,7 @@ def valid_shorthand?(input)
   RPS_CHOICES.keys.one? { |key| key.start_with?(input.to_s) }
 end
 
-def match_input(input)
+def convert_input(input)
   RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
 end
 
@@ -126,7 +126,7 @@ loop do
   winner = nil
 
   loop do
-    user_choice = read_choice
+    user_choice = convert_input(read_choice)
     system('clear')
     computer_choice = RPS_CHOICES.keys.sample
 
