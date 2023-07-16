@@ -2,11 +2,11 @@ require 'yaml'
 MESSAGES = YAML.load_file('rps_messages.yml')
 LANGUAGE = 'en'
 
-RPS_CHOICES = { rock: { wins_against: [:scissors, :lizard] },
-                paper: { wins_against: [:rock, :spock] },
-                scissors: { wins_against: [:paper, :lizard] },
-                lizard: { wins_against: [:spock, :paper] },
-                spock: { wins_against: [:scissors, :rock] } }
+RPS_WINS = { rock: [:scissors, :lizard],
+             paper: [:rock, :spock],
+             scissors: [:paper, :lizard],
+             lizard: [:spock, :paper],
+             spock: [:scissors, :rock] }
 WINNING_SCORE = 3
 
 def prompt(key)
@@ -26,7 +26,7 @@ end
 
 def read_choice
   loop do
-    prompt("Choose your weapon: #{RPS_CHOICES.keys.join(', ')}")
+    prompt("Choose your weapon: #{RPS_WINS.keys.join(', ')}")
     prompt('shorthand')
     choice = gets.chomp.downcase.to_sym
 
@@ -46,15 +46,15 @@ end
 
 # Input validation & processing
 def valid_choice?(input)
-  RPS_CHOICES.keys.include?(input) || valid_shorthand?(input)
+  RPS_WINS.keys.include?(input) || valid_shorthand?(input)
 end
 
 def valid_shorthand?(input)
-  RPS_CHOICES.keys.one? { |key| key.start_with?(input.to_s) }
+  RPS_WINS.keys.one? { |key| key.start_with?(input.to_s) }
 end
 
 def convert_input(input)
-  RPS_CHOICES.keys.find { |key| key.start_with?(input.to_s) }
+  RPS_WINS.keys.find { |key| key.start_with?(input.to_s) }
 end
 
 # Game Logic
@@ -68,7 +68,7 @@ def tie?(user_choice, computer_choice)
 end
 
 def user_win?(user_choice, computer_choice)
-  RPS_CHOICES[user_choice][:wins_against].include?(computer_choice)
+  RPS_WINS[user_choice].include?(computer_choice)
 end
 
 def increment_score(winner, scores)
@@ -81,13 +81,13 @@ def match_end?(scores)
 end
 
 # Outputs
-def display_error(input)
-  error_string = generate_error(input)
+def display_error(user_choice)
+  error_string = generate_error(user_choice)
   prompt(error_string)
 end
 
 def generate_error(input)
-  matching_keys = RPS_CHOICES.keys.select { |key| key.start_with?(input.to_s) }
+  matching_keys = RPS_WINS.keys.select { |key| key.start_with?(input.to_s) }
 
   if matching_keys.empty?
     'invalid_rps_choice'
@@ -102,7 +102,7 @@ def display_result(user_choice, computer_choice, winner)
   prompt("You chose #{user_choice}; computer chose #{computer_choice}.")
   return prompt('tie') if winner.nil?
 
-  prompt winner == 'User' ? 'user_win' : 'computer_win'
+  prompt (winner == 'User' ? 'user_win' : 'computer_win')
 end
 
 def display_score(scores, name)
@@ -128,7 +128,7 @@ loop do
   loop do
     user_choice = convert_input(read_choice)
     system('clear')
-    computer_choice = RPS_CHOICES.keys.sample
+    computer_choice = RPS_WINS.keys.sample
 
     winner = calculate_winner(user_choice, computer_choice)
     display_result(user_choice, computer_choice, winner)
