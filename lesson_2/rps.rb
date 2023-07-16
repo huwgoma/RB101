@@ -31,7 +31,7 @@ def read_choice
     choice = gets.chomp.downcase.to_sym
 
     return choice if valid_choice?(choice)
-    display_error(choice)
+    display_choice_error(choice)
   end
 end
 
@@ -81,12 +81,12 @@ def match_end?(scores)
 end
 
 # Outputs
-def display_error(user_choice)
-  error_string = generate_error(user_choice)
+def display_choice_error(user_choice)
+  error_string = generate_input_error(user_choice)
   prompt(error_string)
 end
 
-def generate_error(input)
+def generate_input_error(input)
   matching_keys = RPS_WINS.keys.select { |key| key.start_with?(input.to_s) }
 
   if matching_keys.empty?
@@ -102,7 +102,7 @@ def display_result(user_choice, computer_choice, winner)
   prompt("You chose #{user_choice}; computer chose #{computer_choice}.")
   return prompt('tie') if winner.nil?
 
-  prompt (winner == 'User' ? 'user_win' : 'computer_win')
+  prompt(winner == 'User' ? 'user_win' : 'computer_win')
 end
 
 def display_score(scores, name)
